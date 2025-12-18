@@ -1,18 +1,18 @@
+require("dotenv").config({ quiet: true });
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// 👉 Kết nối MongoDB (thay username/password bằng MSSV của bạn)
-mongoose
-  .connect("mongodb+srv://20215621:20215621@cluster0.l305ndn.mongodb.net/it4409")
+// 👉 Kết nối MongoDB
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB Error:", err));
+  .catch(err => console.error("❌ MongoDB Error:", err));
+
 
 // 👉 Schema User
 const UserSchema = new mongoose.Schema({
@@ -81,7 +81,10 @@ app.delete("/api/users/:id", async (req, res) => {
 });
 
 // 👉 Start server
-app.listen(3001, () => console.log("🚀 Server running on http://localhost:3001"));
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
 
 
 /*const express = require("express");
